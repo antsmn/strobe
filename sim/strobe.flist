@@ -1,0 +1,6 @@
++incdir+$(SRC_DIR)
++parameter+$(VLOG_TOP).WIDTH=8
+
+../tb/tb_strobe.sv
+
+$(SRC_DIR)/strobe_const_time_det.sv
