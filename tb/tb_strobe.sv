@@ -1,12 +1,12 @@
 module tb_strobe;
   parameter WIDTH = 8;
   logic             clk;
-  logic             resetn;
+  logic             rstn;
   logic             s_i;
-  logic [WIDTH-1:0] k_i = 0;
   logic             v_i;
   logic             v_o;
 
+  logic [WIDTH-1:0] k_i = 3;
   assign v_i = 1;
 
   initial begin
@@ -14,18 +14,18 @@ module tb_strobe;
     forever clk = #1 ~clk;
   end
   initial begin
-    resetn <= 1'b0;
+    rstn <= 1'b0;
     @(posedge clk);
-    resetn <= 1'b1;
+    rstn <= 1'b1;
   end
 
   initial begin
     $dumpfile("tb_strobe");
     $dumpvars(0, tb_strobe);
 
-    @(negedge resetn);
+    @(negedge rstn);
     s_i <= 0;
-    @(posedge resetn);
+    @(posedge rstn);
     @(posedge clk);
     s_i <= 1'b1;
     @(posedge clk);
@@ -40,9 +40,9 @@ module tb_strobe;
   end
 
   always @(posedge clk) begin
-
     if (v_o) k_i <= k_i + 1;
   end
+
   strobe #(.W(WIDTH)) DUT (.*);
 
 

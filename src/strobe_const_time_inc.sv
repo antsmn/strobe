@@ -8,8 +8,8 @@ module strobe #(
   input  logic         v_i,
   output logic         v_o
 );
-  logic enable;
-  logic setup;
+  logic         enable;
+  logic         setup;
 
   assign enable = setup | v_i;
   assign setup = v_o | s_i;

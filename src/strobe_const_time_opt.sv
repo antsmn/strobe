@@ -8,6 +8,9 @@ module strobe #(
   input  logic         v_i,
   output logic         v_o
 );
+
+  // NOTE not really constant time logic because of setup muxes
+
   logic         enable;
   logic         setup;
 
@@ -67,32 +70,19 @@ module strobe #(
 
   assign p_d[K-1] = &s_x[P-1-:2];
 
-  // init value for prefix-and state
-
-  logic [W-1:0] k_n;
-  logic [W-1:0] a;
-
-  assign k_n = ~k_i;
-
-  for (genvar i = 0; i < K; i += 1) begin
-    assign a[i] = &k_n[W-1:i*2];
-  end
-
   always_ff @(posedge clk, negedge rstn) begin
 
-    if (!rstn) p_q <= a;
+    if (!rstn) p_q <= 0;
 
     // In practice, initialization of A can be simplified except when counting to very small numbers. For example, if k_n >= W / 2, then we can safely initialize A to 0. By the time W / 2 cycles have passed, A will contain the correct prefix-and of S.
 
-    else if (enable) p_q <= setup ? a : p_d;
+    else if (enable) p_q <= setup ? 0 : p_d;
 
   end
-
   assign v_o = p_d[0] & v_i;
 
 `ifndef SYNTHESIS
-  always @(posedge clk) assert (!v_i || v_o == (&s & v_i)) else $fatal(0);
-
+  always @(posedge clk) assert (!v_i || v_o === (&s & v_i)) else $fatal(1);
 `endif
 
 endmodule

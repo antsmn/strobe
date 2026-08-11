@@ -3,4 +3,4 @@
 
 ../tb/tb_strobe.sv
 
-$(SRC_DIR)/strobe_const_time_det.sv
+$(SRC_DIR)/strobe_const_time_opt.sv
